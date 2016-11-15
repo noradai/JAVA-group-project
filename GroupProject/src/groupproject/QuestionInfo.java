@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Group.model;
+package groupproject;
 
 /**
  *
@@ -21,8 +21,6 @@ public class QuestionInfo {
     private String validity3;
     private String answer4;
     private String validity4;
-    private String TFanswer;
-    private String FIBanswer;
 
     public String getQuestionType() {
         return questionType;
@@ -111,7 +109,7 @@ public class QuestionInfo {
     public void setValidity4(String validity4) {
         this.validity4 = validity4;
     }
-   
+
     public QuestionInfo(String questionType, String difficultyLevel, String description, String answer1, String validity1, String answer2, String validity2, String answer3, String validity3, String answer4, String validity4) {
         this.questionType = questionType;
         this.difficultyLevel = difficultyLevel;
@@ -125,38 +123,8 @@ public class QuestionInfo {
         this.answer4 = answer4;
         this.validity4 = validity4;
     }
-   
+    
     public QuestionInfo(){}
     
-    
-    public String getAnswer(){
-    String s="";
-    if(questionType.equals("FIB")) s+=FIBanswer.toUpperCase();
-    else if (questionType.equals("TF"))  s+=TFanswer.toUpperCase();
-    else if (questionType.equals("MC")){
-    if (validity1.equals("correct")) s+=("A");
-    else if (validity2.equals("correct")) s+=("B");
-    else if (validity3.equals("correct")) s+=("C");
-    else if (validity4.equals("correct")) s+=("D");
-    }
-    else{
-   
-    if (validity1.equals("correct")) s+="A";
-    if (validity2.equals("correct")) s+="B";
-    if (validity3.equals("correct")) s+="C";
-    if (validity4.equals("correct")) s+="D";
-   
-    }
-    return s;
-    }
-    
-    
-    public boolean checkCorrection(String s){
-    if (s.toUpperCase().equals(getAnswer()))
-            return true;
-    else return false;
-    
-    
-    }
     
 }
