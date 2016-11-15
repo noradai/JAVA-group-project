@@ -1,4 +1,6 @@
-package groupproject;
+package Group.model;
+import Group.model.QuestionInfo;
+import Group.model.Instructor;
 import java.util.*;
 import java.sql.*;
 /**
@@ -6,21 +8,42 @@ import java.sql.*;
  * @author jinleiw
  */
 public class Quiz {
-    
-    public static void main(String[] args)throws Exception{
-
-    }
-    // set attributes
     private ArrayList<QuestionInfo> questions=new ArrayList<QuestionInfo>();
     private ArrayList<Boolean> answers=new ArrayList<Boolean>();
     private Instructor instructor;
-    private Student student=new Student();
-    private int DifficultyLevel;
+    private Student student;
+    private String DifficultyLevel;
     private int questionNumber;
-    private Connection con;
-    private Scanner in=new Scanner(System.in);
+    private Connection con;    
     private java.sql.Date time;
+    private int count=0;
     
+    private Scanner in=new Scanner(System.in);   
+    
+    public static void main(String[] args)throws Exception{
+        Quiz q=new Quiz();
+        q.setDifficultyLevel("E");
+        q.setQuestionNumber(5);
+        q.setConnection();
+        q.setQuestionsFromDatabase();
+        q.dropConnection();
+        System.out.println(q.getQuestions().size());
+        for(int i=0;i<q.getQuestions().size();i++){
+            System.out.print(q.getQuestions().get(i).getQuestionType());
+            System.out.print(q.getQuestions().get(i).getDifficultyLevel());
+            System.out.print(q.getQuestions().get(i).getDescription());
+            System.out.print(q.getQuestions().get(i).getAnswer1());
+            System.out.print(q.getQuestions().get(i).getValidity1());
+            System.out.print(q.getQuestions().get(i).getAnswer2());
+            System.out.print(q.getQuestions().get(i).getValidity2());
+            System.out.print(q.getQuestions().get(i).getAnswer3());
+            System.out.print(q.getQuestions().get(i).getValidity3());
+            System.out.print(q.getQuestions().get(i).getAnswer4());
+            System.out.print(q.getQuestions().get(i).getValidity4());
+            System.out.println();
+        }
+    }
+
 
     /**
      * This is the method that start quiz for the student.
@@ -38,11 +61,12 @@ public class Quiz {
 
     /**
      * This is the method that set questions from the database for the student by the mode.
+     * @throws java.lang.Exception
      */
     public void setQuestionsFromDatabase()throws Exception{
         Statement stmt = con.createStatement();
-        if(DifficultyLevel==4){
-        String query = "SELECT * FROM APP.QUESTION ORDER BY RAND()";
+        if(DifficultyLevel.equals("M")){
+        String query = "SELECT * FROM APP.QUESTION ";
         ResultSet rs = stmt.executeQuery(query);
         for(int i=0;i<questionNumber;i++){
         if(!rs.next()) return;
@@ -50,7 +74,7 @@ public class Quiz {
         }
         }
         else{
-        String query = "SELECT * FROM APP.QUESTION WHERE DIFFICULTYLEVEL= "+DifficultyLevel+" ORDER BY RAND()";
+        String query = "SELECT * FROM APP.QUESTION" ;
         ResultSet rs = stmt.executeQuery(query);
         for(int i=0;i<questionNumber;i++){
         if(!rs.next()) return;
@@ -123,7 +147,7 @@ public class Quiz {
                     + "(TIME DATE,"
                     + "RATE DOUBLE,"
                     + "STUDENT VARCHAR (40),"
-                    + "DIFFICULTYLEVEL INT )";
+                    + "DIFFICULTYLEVEL VARCHAR (10) )";
             stmt.execute(s);        
     }
     
@@ -151,8 +175,54 @@ public class Quiz {
             String query="INSERT INTO RESULT (TIME , RATE, STUDENT, DIFFICULTYLEVEL) VALUES (";
             query+=this.time+",";
             query+=this.getRate()+",'";
-            query+=this.student.getUsername()+"',";
-            query+=this.DifficultyLevel+")";
+            query+=this.student.getUserName()+"','";
+            query+=this.DifficultyLevel+"')";
             stmt.executeUpdate(query);
+    }
+    
+    public void getNextQuestion(){
+        
+    }
+
+    /**
+     * @return the questions
+     */
+    public ArrayList<QuestionInfo> getQuestions() {
+        return questions;
+    }
+
+    /**
+     * @param questions the questions to set
+     */
+    public void setQuestions(ArrayList<QuestionInfo> questions) {
+        this.questions = questions;
+    }
+
+    /**
+     * @return the DifficultyLevel
+     */
+    public String getDifficultyLevel() {
+        return DifficultyLevel;
+    }
+
+    /**
+     * @param DifficultyLevel the DifficultyLevel to set
+     */
+    public void setDifficultyLevel(String DifficultyLevel) {
+        this.DifficultyLevel = DifficultyLevel;
+    }
+
+    /**
+     * @return the questionNumber
+     */
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    /**
+     * @param questionNumber the questionNumber to set
+     */
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
     }
 }
